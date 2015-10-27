@@ -13,6 +13,7 @@ Please read the integration guide for more details on how to use this script.
 
 import sys
 import requests
+import time
 import simplejson as json
 
 API_BASE_URL = 'https://www.neptune.io/api/v1/trigger/channel/zabbix/'
@@ -29,9 +30,13 @@ if __name__ == "__main__":
 
     # Send the event to Neptune.
     try:
-        response = requests.post(API_BASE_URL + api_key, data=json.dumps(zabbix_event), verify=True)
-        if response.status_code != 200:
-            print("Failed to send the event to Neptune.io; status: %d, msg: %s", response.status_code, response.text)
+        for x in range(0, 3):
+            response = requests.post(API_BASE_URL + api_key, data=json.dumps(zabbix_event), verify=True)
+            if response.status_code != 200:
+                print("Failed to send the event to Neptune.io; status: %d, msg: %s", response.status_code, response.text)
+                time.sleep(1)
+            else:
+                break
     except Exception:
         _, e, _ = sys.exc_info()
         print("Failed to send the event to Neptune.io; Error: %s", repr(e))
