@@ -34,8 +34,10 @@ if __name__ == "__main__":
                 headers = { 'Content-Type': 'application/json' }
                 req = urllib2.Request(url=API_BASE_URL + api_key, data=json.dumps(zabbix_event), headers=headers)
                 response = urllib2.urlopen(req)
-                response = response.read()
-                break
+                if response.getcode() == 200:
+                    break
+                else:
+                    print("Failed to send event to Neptune. Status code: ", str(response.getcode()), " Retrying..")
             except Exception:
                 _, e, _ = sys.exc_info()
                 print("Failed to send event to Neptune. Retrying..", repr(e))
