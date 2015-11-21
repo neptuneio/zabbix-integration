@@ -14,7 +14,6 @@ Please read the integration guide for more details on how to use this script.
 import json
 import sys
 import time
-import urllib
 import urllib2
 
 API_BASE_URL = 'https://www.neptune.io/api/v1/trigger/channel/zabbix/'
@@ -33,7 +32,7 @@ if __name__ == "__main__":
         for x in range(0, 3):
             try:
                 headers = { 'Content-Type': 'application/json' }
-                req = urllib2.Request(url=API_BASE_URL, data=json.dumps(zabbix_event), headers=headers)
+                req = urllib2.Request(url=API_BASE_URL + api_key, data=json.dumps(zabbix_event), headers=headers)
                 response = urllib2.urlopen(req)
                 response = response.read()
                 break
